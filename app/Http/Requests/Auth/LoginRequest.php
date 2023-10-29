@@ -4,6 +4,14 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="LoginRequest",
+ *     type="object",
+ *     title="Login Request",
+ *     required={"email", "password"},
+ * )
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -15,9 +23,18 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @OA\Property(
+     *     property="email",
+     *     type="string",
+     *     description="The user's email address",
+     *     example="user@example.com"
+     * )
+     * @OA\Property(
+     *     property="password",
+     *     type="string",
+     *     description="The user's password",
+     *     example="password123"
+     * )
      */
     public function rules(): array
     {

@@ -5,11 +5,14 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 
+/**
+ * @OA\Schema(
+ *     type="object",
+ *     required={"username", "email", "password"},
+ * )
+ */
 class RegistrationRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -19,6 +22,24 @@ class RegistrationRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+
+    /**
+     * @OA\Property(
+     *     property="username",
+     *     type="string",
+     *     maxLength=50,
+     * )
+     * @OA\Property(
+     *     property="email",
+     *     type="string",
+     *     format="email",
+     * )
+     * @OA\Property(
+     *     property="password",
+     *     type="string",
+     *     format="password",
+     * )
      */
     public function rules(): array
     {
