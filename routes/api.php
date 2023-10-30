@@ -15,15 +15,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('/auth')->name('auth.')->controller('AuthController')->group(
-    function(){
+    function () {
         Route::post('/register', 'registrate')->name('register');
         Route::post('/login', 'login')->name('login');
     }
 );
 
-Route::prefix('/user')->name('user.')->middleware('auth:sanctum')->controller('UserController')->group(
-    function(){
-        Route::get('/', 'getUser')->name('get');
-        Route::post('/', 'updateUser')->name('update');
-    }
-);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('/user')->name('user.')->controller('UserController')->group(
+        function () {
+            Route::get('/', 'getUser')->name('get');
+            Route::post('/', 'updateUser')->name('update');
+        }
+    );
+
+
+    Route::prefix('/lobby')->name('lobby.')->controller('LobbyController')->group(function (){
+        Route::post('/create', 'createLobby')->name('create');
+    });
+});
