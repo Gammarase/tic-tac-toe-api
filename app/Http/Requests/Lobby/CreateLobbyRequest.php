@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Lobby;
 
-use App\Enums\GameFigure\GameFigure;
+use App\Enums\GameFigure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 

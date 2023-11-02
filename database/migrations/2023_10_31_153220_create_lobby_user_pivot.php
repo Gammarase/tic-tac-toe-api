@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lobbies', function (Blueprint $table) {
+        Schema::create('lobby_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('winner_id')->nullable()->constrained('users');
-            $table->tinyInteger('status')->default(0);
-            $table->json('state')->nullable();
-            $table->timestamp('finished_at')->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('lobby_id')->constrained();
+            $table->tinyInteger('figure');
             $table->timestamps();
+            $table->unique(['user_id', 'lobby_id']);
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lobbies');
+        Schema::dropIfExists('lobby_user');
     }
 };
