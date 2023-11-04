@@ -25,7 +25,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/user",
+     *     path="/api/user",
      *     operationId="getUser",
      *     tags={"User"},
      *     security={{ "sanctum": {} }},
@@ -67,7 +67,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/user",
+     *     path="/api/user",
      *     operationId="updateUser",
      *     tags={"User"},
      *     security={{ "sanctum": {} }},

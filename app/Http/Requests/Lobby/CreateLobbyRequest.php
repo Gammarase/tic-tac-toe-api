@@ -6,6 +6,23 @@ use App\Enums\GameFigure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
+
+
+/**
+ * @OA\Schema(
+ *     schema="CreateLobbyRequest",
+ *     type="object",
+ *     description="Create Lobby Request",
+ *     @OA\Property(
+ *         property="figure",
+ *         type="integer",
+ *         description="The game figure to be used (0 for nought, 1 for cross)",
+ *         enum={0, 1},
+ *         example=0
+ *     )
+ * )
+ */
+
 class CreateLobbyRequest extends FormRequest
 {
     /**
@@ -24,7 +41,7 @@ class CreateLobbyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'figure' =>['nullable', new Enum(GameFigure::class)],
+            'figure' => ['nullable', new Enum(GameFigure::class)],
         ];
     }
 }

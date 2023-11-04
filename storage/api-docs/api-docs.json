@@ -5,13 +5,13 @@
         "version": "0.1"
     },
     "paths": {
-        "/auth/register": {
+        "/api/auth/register": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Register a new user",
-                "operationId": "f97ee21c10d8d5939e0ab51fe815755f",
+                "operationId": "89bd2331df6e6d3caad7a2d2c5bd2e90",
                 "requestBody": {
                     "description": "Registration data",
                     "required": true,
@@ -87,13 +87,13 @@
                 }
             }
         },
-        "/auth/login": {
+        "/api/auth/login": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Login as an existing user",
-                "operationId": "99d66635c4992aeaa6aa44ff653d0563",
+                "operationId": "dd51a484b7fa0f97c7680fdbde14cf5f",
                 "requestBody": {
                     "description": "Login data",
                     "required": true,
@@ -189,7 +189,130 @@
                 }
             }
         },
-        "/user": {
+        "/api/lobby/create": {
+            "post": {
+                "tags": [
+                    "Lobby"
+                ],
+                "summary": "Create a new lobby",
+                "description": "Creates a new lobby for a game figure.",
+                "operationId": "38b790cb229013d0f8b9f5fea0211629",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateLobbyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Lobby created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/LobbyResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/lobby/join/{lobby}": {
+            "get": {
+                "tags": [
+                    "Lobby"
+                ],
+                "summary": "Join an existing lobby",
+                "description": "Joins an existing lobby using the lobby's ID.",
+                "operationId": "0bc6e18b245f0e088d9770e6c0651675",
+                "parameters": [
+                    {
+                        "name": "lobby",
+                        "in": "path",
+                        "description": "ID of the lobby to join",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Joined lobby successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/LobbyResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lobby not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The lobby is full",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "The lobby is full"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
             "get": {
                 "tags": [
                     "User"
@@ -397,6 +520,59 @@
                 },
                 "type": "object"
             },
+            "CreateLobbyRequest": {
+                "description": "Create Lobby Request",
+                "properties": {
+                    "figure": {
+                        "description": "The game figure to be used (0 for nought, 1 for cross)",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 0
+                    }
+                },
+                "type": "object"
+            },
+            "LobbyResource": {
+                "description": "Lobby resource representation",
+                "properties": {
+                    "id": {
+                        "description": "The ID of the lobby",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "winner": {
+                        "description": "The username of the lobby's winner (null if no winner yet)",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The status of the lobby, 0 - initialized, 1 - in progress, 2 - finished",
+                        "type": "integer",
+                        "default": 0,
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "example": 0
+                    },
+                    "finished_at": {
+                        "description": "The timestamp when the lobby finished",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "players": {
+                        "description": "Array of players in the lobby",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "UserResource": {
                 "properties": {
                     "id": {
@@ -430,6 +606,10 @@
         {
             "name": "Authentication",
             "description": "Endpoints for user registration and login"
+        },
+        {
+            "name": "Lobby",
+            "description": "Operations related to lobbies"
         },
         {
             "name": "User",

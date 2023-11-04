@@ -24,6 +24,9 @@ class LobbyService extends AbstractService
 
     public function joinLobby(Lobby $lobby, User $user)
     {
+        if ($user->isInList($lobby->players)) {
+            return $lobby;
+        }
         abort_if(
             $lobby->players->count() >= 2,
             Response::BAD_REQUEST,

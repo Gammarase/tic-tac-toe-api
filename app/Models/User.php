@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -46,5 +47,10 @@ class User extends Authenticatable
     public function lobbies(): BelongsToMany
     {
         return $this->belongsToMany(Lobby::class)->using(UserLobbyPivot::class);
+    }
+
+    public function isInList(Collection $users): bool
+    {
+        return $users->contains($this);
     }
 }
