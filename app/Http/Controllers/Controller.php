@@ -9,7 +9,6 @@ use Illuminate\Routing\Controller as BaseController;
 /**
  * @OA\Info(title="TicTacToe API", version="0.1")
  */
-
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;

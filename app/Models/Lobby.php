@@ -17,7 +17,7 @@ class Lobby extends Model
         'winner_id',
         'status',
         'state',
-        'finished_at'
+        'finished_at',
     ];
 
     protected $casts = [

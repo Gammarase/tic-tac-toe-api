@@ -6,13 +6,12 @@ use App\Enums\GameFigure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-
-
 /**
  * @OA\Schema(
  *     schema="CreateLobbyRequest",
  *     type="object",
  *     description="Create Lobby Request",
+ *
  *     @OA\Property(
  *         property="figure",
  *         type="integer",
@@ -22,7 +21,6 @@ use Illuminate\Validation\Rules\Enum;
  *     )
  * )
  */
-
 class CreateLobbyRequest extends FormRequest
 {
     /**

@@ -26,7 +26,7 @@ return [
     |
     */
     'openapi' => [
-        'path' => env('REDOC_OPENAPI_PATH', 'http://localhost/docs/api-docs.json')
+        'path' => env('REDOC_OPENAPI_PATH', 'http://localhost/docs/api-docs.json'),
     ],
 
     'config' => [
@@ -106,5 +106,5 @@ return [
         |
         */
         'trust' => true,
-    ]
+    ],
 ];

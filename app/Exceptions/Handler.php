@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-$this->renderable(function (NotFoundHttpException $e, $request) {
+        $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return Response::error(__('Not found'), $e->getStatusCode());
             }
@@ -86,7 +86,7 @@ $this->renderable(function (NotFoundHttpException $e, $request) {
 
                         return Response::error($errors, Response::VALIDATION_ERROR);
                     }
-                         }
+                }
 
                 return Response::error($errors, Response::VALIDATION_ERROR);
             }

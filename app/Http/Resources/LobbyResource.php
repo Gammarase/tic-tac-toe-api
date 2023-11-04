@@ -5,12 +5,12 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 /**
  * @OA\Schema(
  *     schema="LobbyResource",
  *     type="object",
  *     description="Lobby resource representation",
+ *
  *     @OA\Property(
  *         property="id",
  *         type="integer",
@@ -40,14 +40,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         property="players",
  *         type="array",
  *         description="Array of players in the lobby",
+ *
  *         @OA\Items(
  *             ref="#/components/schemas/UserResource"
  *         )
  *     )
  * )
  */
-
-
 class LobbyResource extends JsonResource
 {
     /**
@@ -62,7 +61,7 @@ class LobbyResource extends JsonResource
             'winner' => $this->winner->username ?? null,
             'status' => $this->status,
             'finished_at' => $this->finished_at,
-            'players' => UserResource::collection($this->whenLoaded('players'))
+            'players' => UserResource::collection($this->whenLoaded('players')),
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Enums;
 
-
 enum GameFigure: int
 {
     case nought = 0;

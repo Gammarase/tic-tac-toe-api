@@ -11,14 +11,14 @@ use App\Services\AbstractService;
 
 class LobbyService extends AbstractService
 {
-
     public function createLobby(GameFigure $figure, User $user)
     {
         $lobby = Lobby::create([
-            'status' => GameStatus::INITIALIZED
+            'status' => GameStatus::INITIALIZED,
         ]);
         $gameFigure = $figure ?? fake()->randomElement([GameFigure::nought, GameFigure::cross]);
         $lobby->players()->attach($user, ['figure' => $gameFigure]);
+
         return $lobby;
     }
 
@@ -37,6 +37,7 @@ class LobbyService extends AbstractService
             ->pivot->figure->oppositeFigure()
             ?? fake()->randomElement([GameFigure::nought, GameFigure::cross]);
         $lobby->players()->attach($user, ['figure' => $figure]);
+
         return $lobby;
     }
 }

@@ -46,7 +46,7 @@ class RegistrationRequest extends FormRequest
         return [
             'username' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', Rules\Password::defaults()]
+            'password' => ['required', 'string', Rules\Password::defaults()],
         ];
     }
 }

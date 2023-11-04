@@ -14,7 +14,7 @@ class AuthService extends AbstractService
         $user = User::create([
             'username' => $userData['username'],
             'email' => $userData['email'],
-            'password' => Hash::make($userData['password'])
+            'password' => Hash::make($userData['password']),
         ]);
 
         return $user->createToken('default')->plainTextToken;
@@ -27,7 +27,7 @@ class AuthService extends AbstractService
             abort(Response::BAD_REQUEST, __('No user with this email'));
         }
 
-        if (!Hash::check($credentials['password'], $user->password)) {
+        if (! Hash::check($credentials['password'], $user->password)) {
             abort(Response::BAD_REQUEST, __('Wrong password'));
         }
 
