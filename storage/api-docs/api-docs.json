@@ -600,6 +600,14 @@
                 },
                 "type": "object"
             }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "<token>",
+                "name": "Authorization",
+                "in": "header"
+            }
         }
     },
     "tags": [
