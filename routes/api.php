@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         function () {
             Route::get('/', 'getUser')->name('get');
             Route::post('/', 'updateUser')->name('update');
+            Route::get('/history', 'getHistory')->name('history');
         }
     );
 

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Resources\LobbyResource;
 use App\Http\Resources\UserResource;
 use App\Http\Response;
+use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Http\Request;
 
@@ -157,5 +159,147 @@ class UserController extends Controller
                 $request->user()
             )
         );
+    }
+
+    /**
+     * Get the history of the user.
+     *
+     * @OA\Get(
+     *     path="/api/user/history",
+     *     summary="Get user history",
+     *     description="Retrieve the history of the user's gameplays.",
+     *     tags={"User"},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=1
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="success",
+     *                 type="boolean",
+     *                 example=true
+     *             ),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="data",
+     *                     type="object",
+     *                     ref="#/components/schemas/LobbyResource"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="links",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="first",
+     *                         type="string",
+     *                         example="http://localhost/api/user/history?page=1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="last",
+     *                         type="string",
+     *                         example="http://localhost/api/user/history?page=1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="prev",
+     *                         type="null",
+     *                         nullable=true
+     *                     ),
+     *                     @OA\Property(
+     *                         property="next",
+     *                         type="null",
+     *                         nullable=true
+     *                     )
+     *                 ),
+     *                 @OA\Property(
+     *                     property="meta",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="current_page",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="from",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="last_page",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="links",
+     *                         type="array",
+     *                         @OA\Items(
+     *                             @OA\Property(
+     *                                 property="url",
+     *                                 type="null",
+     *                                 nullable=true
+     *                             ),
+     *                             @OA\Property(
+     *                                 property="label",
+     *                                 type="string",
+     *                                 example="&laquo; Previous"
+     *                             ),
+     *                             @OA\Property(
+     *                                 property="active",
+     *                                 type="boolean",
+     *                                 example=false
+     *                             )
+     *                         )
+     *                     ),
+     *                     @OA\Property(
+     *                         property="path",
+     *                         type="string",
+     *                         example="http://localhost/api/user/history"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="per_page",
+     *                         type="integer",
+     *                         example=7
+     *                     ),
+     *                     @OA\Property(
+     *                         property="to",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="total",
+     *                         type="integer",
+     *                         example=1
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="data", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
+     */
+    public function getHistory(Request $request)
+    {
+        $history = $this->userService->getHistory($request->user());
+
+        return Response::send(LobbyResource::collection($history)->response()->getData(true));
     }
 }

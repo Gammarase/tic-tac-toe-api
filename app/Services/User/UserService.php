@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Enums\GameStatus;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\AbstractService;
@@ -13,5 +14,15 @@ class UserService extends AbstractService
         $user->update($data);
 
         return new UserResource($user);
+    }
+
+    public function getHistory(User $user)
+    {
+        return $user
+            ->lobbies()
+            ->where('status', GameStatus::FINISHED)
+            ->with('players')
+            ->orderBy('finished_at', 'DESC')
+            ->paginate(7);
     }
 }
