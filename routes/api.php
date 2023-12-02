@@ -31,5 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/lobby')->name('lobby.')->controller('LobbyController')->group(function () {
         Route::post('/create', 'createLobby')->name('create');
         Route::get('/join/{lobby}', 'joinLobby')->name('join');
+        Route::post('/{lobby}/move', 'makeMove')->name('move');
     });
 });
