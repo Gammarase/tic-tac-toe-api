@@ -59,6 +59,8 @@ services:
       dockerfile: docker/api/Dockerfile
     networks:
       - tic-tac-toe-api
+    ports:
+      - '${PUSHER_PORT:-6001}:6001'
     volumes:
       - '.:/var/www'
     depends_on:

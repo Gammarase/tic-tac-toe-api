@@ -19,8 +19,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     ),
  *     @OA\Property(
  *         property="winner",
- *         type="string",
- *         description="The username of the lobby's winner (null if no winner yet)"
+ *         type="object",
+ *         description="The winner of the lobby",
+ *         ref="#/components/schemas/UserResource",
  *     ),
  *     @OA\Property(
  *         property="status",
@@ -30,6 +31,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         example=0,
  *         default=0
  *     ),
+ *     @OA\Property(
+ *       property="state",
+ *       type="array",
+ *       description="The state of the game, -1 - empty, 0 - nought, 1 - cross",
+ *       example={{-1, 0, -1}, {0, 1, 1}, {-1, 0, 1}},
+ *       @OA\Items(
+ *         type="array",
+ *         example={-1, 0, -1},
+ *         @OA\Items(
+ *           type="integer",
+ *           description="The state of the cell, -1 - empty, 0 - nought, 1 - cross",
+ *           enum={-1, 0, 1},
+ *           example=0,
+ *           default=-1
+ *           )
+ *         )
+ *       ),
  *     @OA\Property(
  *         property="finished_at",
  *         type="string",
@@ -42,7 +60,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         description="Array of players in the lobby",
  *
  *         @OA\Items(
- *             ref="#/components/schemas/UserResource"
+ *             ref="#/components/schemas/UserResourceWithFigure"
  *         )
  *     )
  * )
@@ -58,8 +76,9 @@ class LobbyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'winner' => $this->winner->username ?? null,
+            'winner' => new UserResource($this->winner) ?? null,
             'status' => $this->status,
+            'state' => $this->state,
             'finished_at' => $this->finished_at,
             'players' => UserResource::collection($this->whenLoaded('players')),
         ];

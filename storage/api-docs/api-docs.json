@@ -312,6 +312,140 @@
                 }
             }
         },
+        "/api/lobby/{lobby}/move": {
+            "post": {
+                "tags": [
+                    "Lobby"
+                ],
+                "summary": "Make a move in the lobby",
+                "description": "Make a move in the lobby.",
+                "operationId": "0dd1913cf680d137a16dafd2e0b1692d",
+                "parameters": [
+                    {
+                        "name": "lobby",
+                        "in": "path",
+                        "description": "The ID of the lobby",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MakeMoveRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": "Ok"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "You are not a player of this game"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "The game is already finished/Need two players to start the game/It is not your turn/The cell is already filled"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lobby not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Lobby not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user": {
             "get": {
                 "tags": [
@@ -474,6 +608,148 @@
                     }
                 ]
             }
+        },
+        "/api/user/history": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user history",
+                "description": "Retrieve the history of the user's gameplays.",
+                "operationId": "06c7e89ff54ef59ba3566b2454321f99",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/LobbyResource"
+                                                },
+                                                "links": {
+                                                    "properties": {
+                                                        "first": {
+                                                            "type": "string",
+                                                            "example": "http://localhost/api/user/history?page=1"
+                                                        },
+                                                        "last": {
+                                                            "type": "string",
+                                                            "example": "http://localhost/api/user/history?page=1"
+                                                        },
+                                                        "prev": {
+                                                            "type": "null",
+                                                            "nullable": true
+                                                        },
+                                                        "next": {
+                                                            "type": "null",
+                                                            "nullable": true
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "meta": {
+                                                    "properties": {
+                                                        "current_page": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "from": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "last_page": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "links": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "properties": {
+                                                                    "url": {
+                                                                        "type": "null",
+                                                                        "nullable": true
+                                                                    },
+                                                                    "label": {
+                                                                        "type": "string",
+                                                                        "example": "&laquo; Previous"
+                                                                    },
+                                                                    "active": {
+                                                                        "type": "boolean",
+                                                                        "example": false
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "path": {
+                                                            "type": "string",
+                                                            "example": "http://localhost/api/user/history"
+                                                        },
+                                                        "per_page": {
+                                                            "type": "integer",
+                                                            "example": 7
+                                                        },
+                                                        "to": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "total": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -535,6 +811,31 @@
                 },
                 "type": "object"
             },
+            "MakeMoveRequest": {
+                "title": "MakeMoveRequest",
+                "description": "Request body for making a move in the tic-tac-toe game.",
+                "required": [
+                    "x",
+                    "y"
+                ],
+                "properties": {
+                    "x": {
+                        "description": "The x-coordinate of the move.",
+                        "type": "integer",
+                        "maximum": 2,
+                        "minimum": 0,
+                        "example": 0
+                    },
+                    "y": {
+                        "description": "The y-coordinate of the move.",
+                        "type": "integer",
+                        "maximum": 2,
+                        "minimum": 0,
+                        "example": 0
+                    }
+                },
+                "type": "object"
+            },
             "LobbyResource": {
                 "description": "Lobby resource representation",
                 "properties": {
@@ -544,8 +845,7 @@
                         "format": "int64"
                     },
                     "winner": {
-                        "description": "The username of the lobby's winner (null if no winner yet)",
-                        "type": "string"
+                        "$ref": "#/components/schemas/UserResource"
                     },
                     "status": {
                         "description": "The status of the lobby, 0 - initialized, 1 - in progress, 2 - finished",
@@ -558,6 +858,46 @@
                         ],
                         "example": 0
                     },
+                    "state": {
+                        "description": "The state of the game, -1 - empty, 0 - nought, 1 - cross",
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "description": "The state of the cell, -1 - empty, 0 - nought, 1 - cross",
+                                "type": "integer",
+                                "default": -1,
+                                "enum": [
+                                    -1,
+                                    0,
+                                    1
+                                ],
+                                "example": 0
+                            },
+                            "example": [
+                                -1,
+                                0,
+                                -1
+                            ]
+                        },
+                        "example": [
+                            [
+                                -1,
+                                0,
+                                -1
+                            ],
+                            [
+                                0,
+                                1,
+                                1
+                            ],
+                            [
+                                -1,
+                                0,
+                                1
+                            ]
+                        ]
+                    },
                     "finished_at": {
                         "description": "The timestamp when the lobby finished",
                         "type": "string",
@@ -567,7 +907,7 @@
                         "description": "Array of players in the lobby",
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/UserResource"
+                            "$ref": "#/components/schemas/UserResourceWithFigure"
                         }
                     }
                 },
@@ -599,12 +939,48 @@
                     }
                 },
                 "type": "object"
+            },
+            "UserResourceWithFigure": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "john_doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john@example.com"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-29T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-30T14:30:00Z"
+                    },
+                    "figure": {
+                        "description": "0 - nought, 1 - cross",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 0
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
             "sanctum": {
                 "type": "apiKey",
-                "description": "<token>",
+                "description": "Bearer <token>",
                 "name": "Authorization",
                 "in": "header"
             }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\GameFigure;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lobby\CreateLobbyRequest;
+use App\Http\Requests\Lobby\MakeMoveRequest;
 use App\Http\Resources\LobbyResource;
 use App\Http\Response;
 use App\Models\Lobby;
@@ -119,5 +120,128 @@ class LobbyController extends Controller
         $joinedLobby = $this->lobbyService->joinLobby($lobby, $request->user());
 
         return Response::send(new LobbyResource($joinedLobby));
+    }
+
+
+    /**
+     * Make a move in the lobby.
+     *
+     * @param Lobby $lobby The lobby instance.
+     * @param MakeMoveRequest $request The request object.
+     * @return \Illuminate\Http\Response The response object.
+     *
+     * @OA\Post(
+     *     path="/api/lobby/{lobby}/move",
+     *     summary="Make a move in the lobby",
+     *     tags={"Lobby"},
+     *     @OA\Parameter(
+     *         name="lobby",
+     *         in="path",
+     *         description="The ID of the lobby",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *            ref="#/components/schemas/MakeMoveRequest"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="success",
+     *                 type="boolean",
+     *                 example=true
+     *                 ),
+     *             @OA\Property(
+     *               property="data",
+     *               type="object",
+     *               example="Ok",
+     *                 )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *       response=403,
+     *       description="Forbidden",
+     *       @OA\JsonContent(
+     *         @OA\Property(
+     *           property="success",
+     *           type="boolean",
+     *           example=false
+     *           ),
+     *           @OA\Property(
+     *             property="data",
+     *             type="string",
+     *             example="You are not a player of this game"
+     *             )
+     *           )
+     *         ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="success",
+     *                 type="boolean",
+     *                 example=false
+     *             ),
+     *             @OA\Property(
+     *               property="data",
+     *               type="string",
+     *               example="The game is already finished/Need two players to start the game/It is not your turn/The cell is already filled"
+     *         )
+     *     ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="success",
+     *                 type="boolean",
+     *                 example=false
+     *             ),
+     *             @OA\Property(
+     *               property="data",
+     *               type="string",
+     *               example="Unauthenticated"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Lobby not Found",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="success",
+     *                 type="boolean",
+     *                 example=false
+     *             ),
+     *             @OA\Property(
+     *               property="data",
+     *               type="string",
+     *               example="Lobby not found"
+     *            )
+     *         )
+     *     )
+     * )
+     */
+    public function makeMove(Lobby $lobby, MakeMoveRequest $request)
+    {
+        $result = $this->lobbyService->makeMove(
+            $lobby,
+            $request->user(),
+            $request->input('x'),
+            $request->input('y'),
+        );
+
+        return Response::send($result);
     }
 }
