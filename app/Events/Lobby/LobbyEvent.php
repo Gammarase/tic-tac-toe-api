@@ -5,7 +5,7 @@ namespace App\Events\Lobby;
 use App\Http\Resources\LobbyResource;
 use App\Models\Lobby;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -30,7 +30,7 @@ class LobbyEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("lobby-{$this->lobby->id}"),
+            new Channel("lobby-{$this->lobby->id}"),
         ];
     }
 
